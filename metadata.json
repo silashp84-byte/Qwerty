@@ -1,0 +1,8 @@
+{
+  "name": "Gemini Vision Trader",
+  "description": "A high-precision trading assistant with real-time market analysis and automated price alerts every 90 seconds, powered by Gemini 3 Flash.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
