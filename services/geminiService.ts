@@ -7,16 +7,12 @@ export const getMarketAnalysis = async (market: string): Promise<TradingSignal> 
   
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
-    contents: `Analyze the current ${market} market conditions. 
-    Act as a world-class financial analyst. Be assertive. 
-    Pick a specific high-volume asset within the ${market} category (e.g., BTC/USD for Crypto, EUR/USD for Forex, or a major stock).
-    Provide a clear trading signal (BUY, SELL, or NEUTRAL) for a potential move of 1000 points (or equivalent in current asset units) within the next 15 minutes.
-    Include:
-    1. A confidence score (0-100).
-    2. A target price for this 15-minute window.
-    3. The exact minute for entry (e.g., "14:05") and the expected minute for exit when hitting the target (e.g., "14:18").
-    4. The recommended lot size to achieve a 200% profit on this 1000-point move, assuming a standard risk management profile.
-    5. A short technical explanation.`,
+    contents: `Analyze ${market} market. 
+    Act as a world-class analyst. 
+    1. Pick a high-volume asset (e.g., BTC/USD, EUR/USD).
+    2. Signal (BUY/SELL/NEUTRAL) for 1000pt move in 15min.
+    3. Confidence (0-100), Target Price, Entry/Exit minutes, Lot Size for 200% profit.
+    4. Short technical reasoning.`,
     config: {
       responseMimeType: "application/json",
       responseSchema: {
