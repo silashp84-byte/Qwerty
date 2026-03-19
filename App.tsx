@@ -115,20 +115,26 @@ const App: React.FC = () => {
 
       <main className="flex-1 p-6 space-y-6 overflow-y-auto pb-24">
         {/* Market Selector */}
-        <div className="flex space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
-          {Object.values(MarketType).map(m => (
-            <button
-              key={m}
-              onClick={() => setActiveMarket(m)}
-              className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
-                activeMarket === m 
-                  ? 'bg-slate-800 text-white shadow-lg' 
-                  : 'text-slate-500 hover:text-slate-300'
-              }`}
-            >
-              {m}
-            </button>
-          ))}
+        <div className="flex flex-col space-y-3">
+          <div className="flex space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
+            {Object.values(MarketType).map(m => (
+              <button
+                key={m}
+                onClick={() => setActiveMarket(m)}
+                className={`flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all ${
+                  activeMarket === m 
+                    ? 'bg-slate-800 text-white shadow-lg' 
+                    : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center justify-center space-x-2 bg-cyan-500/5 border border-cyan-500/20 py-1.5 rounded-lg">
+            <Target className="w-3 h-3 text-cyan-400" />
+            <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">Strategy: 1000pt Target / 15m Window</span>
+          </div>
         </div>
 
         {/* Gemini Vision Component */}
@@ -155,7 +161,9 @@ const App: React.FC = () => {
           <div className={`p-5 rounded-2xl border-2 transition-all duration-500 ${getStatusBg(currentSignal.direction)} shadow-2xl`}>
             <div className="flex justify-between items-start mb-3">
               <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Current Trigger</span>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                  {currentSignal.market} • Current Trigger
+                </span>
                 <h2 className={`text-4xl font-orbitron font-bold ${getStatusColor(currentSignal.direction)}`}>
                   {currentSignal.direction}
                 </h2>
@@ -172,7 +180,29 @@ const App: React.FC = () => {
               "{currentSignal.reasoning}"
             </p>
 
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2 mt-4 pt-4 border-t border-slate-800/50">
+              <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-500 block uppercase tracking-tighter">Target (15m)</span>
+                <span className="font-orbitron text-emerald-400 text-sm">{currentSignal.targetPrice}</span>
+              </div>
+              <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
+                <span className="text-[10px] text-slate-500 block uppercase tracking-tighter">Lot Size (200% Profit)</span>
+                <span className="font-orbitron text-cyan-400 text-sm">{currentSignal.lotSize}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 mt-2">
+              <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800 flex justify-between items-center">
+                <span className="text-[10px] text-slate-500 uppercase tracking-tighter">Entry</span>
+                <span className="font-orbitron text-white text-xs">{currentSignal.entryTime}</span>
+              </div>
+              <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800 flex justify-between items-center">
+                <span className="text-[10px] text-slate-500 uppercase tracking-tighter">Exit</span>
+                <span className="font-orbitron text-white text-xs">{currentSignal.exitTime}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2 mt-2">
               <div className="bg-slate-950/50 p-2 rounded-lg border border-slate-800">
                 <span className="text-[10px] text-slate-500 block">RSI</span>
                 <span className="font-orbitron text-white text-xs">{currentSignal.indicators.rsi}</span>
@@ -213,8 +243,15 @@ const App: React.FC = () => {
                 <div className="flex items-center space-x-3">
                   <div className={`w-2 h-2 rounded-full ${h.direction === 'BUY' ? 'bg-emerald-500' : h.direction === 'SELL' ? 'bg-rose-500' : 'bg-cyan-500'} animate-pulse`}></div>
                   <div>
-                    <div className="font-bold text-sm text-white">{h.direction} <span className="text-slate-600 font-normal">at</span> {h.price}</div>
-                    <div className="text-[10px] text-slate-500">{h.timestamp} • {h.indicators.trend}</div>
+                    <div className="font-bold text-sm text-white">
+                      <span className="text-cyan-400">{h.market}</span> • {h.direction} <span className="text-slate-600 font-normal">at</span> {h.price}
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      {h.timestamp} • Target: {h.targetPrice} • Lot: {h.lotSize}
+                    </div>
+                    <div className="text-[10px] text-slate-600">
+                      Entry: {h.entryTime} • Exit: {h.exitTime}
+                    </div>
                   </div>
                 </div>
                 <div className={`font-orbitron text-xs ${getStatusColor(h.direction)}`}>

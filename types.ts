@@ -3,6 +3,12 @@ export interface TradingSignal {
   direction: 'BUY' | 'SELL' | 'NEUTRAL';
   confidence: number;
   price: string;
+  targetPrice: string;
+  timeframe: string;
+  market: string;
+  entryTime: string;
+  exitTime: string;
+  lotSize: string;
   reasoning: string;
   indicators: {
     rsi: number;
